@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17130f">
+<meta name="description" content="20道题，看看你更接近哪位历史人物性格原型。">
+<title>你像哪位历史人物？｜历史人物性格测试</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:#f5efe5;color:#241e18;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+button{font:inherit}.wrap{max-width:960px;margin:auto;padding:0 20px 70px}
+.hero{min-height:430px;display:flex;align-items:center;justify-content:center;text-align:center;padding:70px 0 50px}
+.hero-inner{max-width:720px}.eyebrow{display:inline-block;padding:8px 14px;border:1px solid #c9b49a;border-radius:99px;color:#765333;font-size:12px;letter-spacing:2px;background:#fffaf3}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(44px,8vw,78px);line-height:1.02;letter-spacing:-3px;margin:22px 0 18px}
+.hero p{font-size:17px;line-height:1.8;color:#756b61;margin:0 auto 30px}
+.btn{border:0;border-radius:13px;padding:15px 24px;cursor:pointer}.primary{background:#76502e;color:white;box-shadow:0 10px 25px #76502e25}.primary:hover{background:#5d3e24}.ghost{background:#ebe1d2;color:#594b3e}
+.card{background:#fffdf9;border:1px solid #e5d9c9;border-radius:25px;box-shadow:0 18px 55px #513b2210;padding:30px}
+.hidden{display:none!important}
+.top{display:flex;justify-content:space-between;color:#8b8177;font-size:13px;margin-bottom:9px}.track{height:8px;background:#ece2d4;border-radius:9px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#76502e,#c89a62);transition:.3s}
+.question{font-size:27px;line-height:1.45;margin:28px 0}.options{display:grid;gap:12px}.option{border:1px solid #e4d9ca;border-radius:15px;padding:17px;background:white;cursor:pointer;text-align:left;transition:.18s}.option:hover{border-color:#b99167;transform:translateY(-1px)}.option.selected{border-color:#76502e;background:#f6ede1;box-shadow:0 0 0 2px #76502e16}
+.actions{display:flex;justify-content:space-between;gap:12px;margin-top:26px}.actions .btn{min-width:120px}
+.result{text-align:center}.result-icon{font-size:62px}.result h2{font-family:Georgia,"Times New Roman",serif;font-size:46px;margin:5px 0}.type{color:#76502e;font-weight:700}.tags{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:18px}.tag{background:#f0e4d5;color:#6d4b2d;border-radius:99px;padding:8px 13px;font-size:13px}.intro{max-width:720px;margin:24px auto;text-align:left;line-height:1.9;color:#5e564e}
+.share{max-width:500px;margin:25px auto;padding:27px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#241d16,#76502e);text-align:left}.share small{opacity:.7;letter-spacing:2px}.share strong{display:block;font-family:Georgia,serif;font-size:38px;margin:10px 0}.share p{margin:0;opacity:.85}
+.result-section{text-align:left;border-top:1px solid #e7ddcf;padding-top:25px;margin-top:28px}.result-section h3{margin:0 0 16px}.score{margin:13px 0}.score-head{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}.score-track{height:9px;background:#eee5d9;border-radius:10px;overflow:hidden}.score-fill{height:100%;background:#9a7048;border-radius:10px}
+.note{text-align:center;color:#9a9086;font-size:12px;line-height:1.7;margin-top:25px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero" id="home">
+<div class="hero-inner">
+<span class="eyebrow">HISTORY × PERSONALITY</span>
+<h1>你像哪位历史人物？</h1>
+<p>20道问题，从你的决策、竞争、人际关系、领导方式与价值取向出发，寻找与你最接近的历史人物性格原型。</p>
+<button class="btn primary" onclick="start()">开始测试</button>
+</div>
+</section>
+
+<section id="quiz" class="card hidden">
+<div class="top"><span id="counter"></span><span id="pct"></span></div>
+<div class="track"><div id="fill" class="fill"></div></div>
+<div id="q" class="question"></div><div id="opts" class="options"></div>
+<div class="actions"><button id="back" class="btn ghost" onclick="prev()">上一题</button><button id="next" class="btn primary" onclick="next()">下一题</button></div>
+</section>
+
+<section id="result" class="card result hidden"></section>
+<p class="note">娱乐性格测试，仅用于自我观察与娱乐，不代表对真实历史人物人格的科学判定。</p>
+</div>
+<script>
+const qs=[
+["面对重要决定，你通常会？",["先收集大量信息再决定",["曹操",2,"诸葛亮",3,"曾国藩",2]],["凭直觉迅速行动",["拿破仑",3,"项羽",2,"曹操",1]],["先观察局势再寻找机会",["刘邦",3,"孙权",3]],["反复权衡，尽量避免隐患",["诸葛亮",3,"曾国藩",3,"林肯",1]]],
+["团队发生冲突时，你更倾向于？",["直接站出来解决",["曹操",3,"项羽",2,"拿破仑",2]],["分别沟通寻找共识",["刘邦",3,"林肯",3,"孙权",2]],["先观察再行动",["诸葛亮",3,"曾国藩",2]],["坚持原则不轻易妥协",["武则天",3,"林肯",2,"项羽",1]]],
+["别人最容易怎样评价你？",["有魄力、行动力强",["拿破仑",3,"曹操",3,"项羽",2]],["聪明谨慎、想得多",["诸葛亮",3,"曾国藩",3]],["会做人、容易让人跟随",["刘邦",3,"孙权",3,"林肯",2]],["有自己的原则和主见",["武则天",3,"项羽",2,"林肯",2]]],
+["发现自己走错了一条路，你会？",["马上止损换路",["曹操",3,"刘邦",2]],["继续坚持并扭转局面",["项羽",3,"拿破仑",3]],["复盘后重新计划",["诸葛亮",3,"曾国藩",3]],["听取身边人的意见",["孙权",3,"林肯",2]]],
+["突然获得很大的权力，你第一反应？",["扩大影响力",["武则天",3,"拿破仑",3]],["建立稳定规则",["诸葛亮",3,"曾国藩",3]],["笼络人才一起做事",["刘邦",3,"曹操",2,"孙权",2]],["先确保局势稳定",["林肯",3,"孙权",2]]],
+["你更欣赏哪种领导方式？",["强势果断、目标明确",["曹操",3,"拿破仑",3]],["运筹帷幄、靠谋略取胜",["诸葛亮",3,"曹操",2]],["知人善任、发挥优势",["刘邦",3,"孙权",3]],["靠原则和长期价值凝聚人",["林肯",3,"曾国藩",2]]],
+["遇到竞争对手时，你通常？",["正面竞争赢下来",["项羽",3,"拿破仑",3]],["寻找弱点制定策略",["曹操",3,"诸葛亮",3]],["尽量把对手变成伙伴",["刘邦",3,"孙权",3]],["保持距离避免冲突",["曾国藩",3,"林肯",2]]],
+["朋友背叛了你，你更可能？",["立即反击",["武则天",3,"曹操",2,"项羽",2]],["表面平静，重新评估关系",["诸葛亮",3,"孙权",2]],["为了大局仍可合作",["刘邦",3,"曹操",2]],["彻底划清界限",["曾国藩",3,"林肯",2]]],
+["你更看重人生中的什么？",["成就和影响力",["武则天",3,"拿破仑",3]],["智慧与掌控局面的能力",["曹操",3,"诸葛亮",3]],["人际关系与团队成就",["刘邦",3,"孙权",3]],["原则、责任和长期积累",["林肯",3,"曾国藩",3]]],
+["如果所有人都不看好你，你会？",["证明给所有人看",["项羽",3,"拿破仑",3,"武则天",2]],["默默准备等时机",["曹操",3,"诸葛亮",3]],["找到支持者一起完成",["刘邦",3,"孙权",3]],["不在意评价，坚持长期做",["林肯",3,"曾国藩",3]]],
+["进入陌生群体，你通常会？",["主动认识关键人物",["刘邦",3,"曹操",2]],["先观察每个人特点",["诸葛亮",3,"孙权",2]],["自然成为活跃的人",["项羽",3,"拿破仑",2]],["慢慢融入，不急表现",["曾国藩",3,"林肯",2]]],
+["高风险但高收益的机会出现，你会？",["抓住机会",["拿破仑",3,"项羽",3,"武则天",2]],["先计算风险",["诸葛亮",3,"曹操",3]],["找伙伴共同承担",["刘邦",3,"孙权",3]],["除非确定否则不冒险",["曾国藩",3,"林肯",2]]],
+["你更喜欢哪种工作状态？",["拥有决定权掌控方向",["曹操",3,"武则天",3]],["安静研究复杂问题",["诸葛亮",3,"曾国藩",2]],["带团队完成目标",["刘邦",3,"孙权",3]],["做有长期意义的事",["林肯",3,"曾国藩",2]]],
+["发现一个规则明显不合理，你会？",["想办法绕开",["曹操",3,"刘邦",2]],["研究规则寻找解决方式",["诸葛亮",3,"曾国藩",3]],["直接挑战规则",["武则天",3,"项羽",3]],["推动大家一起改变",["林肯",3,"孙权",2]]],
+["压力很大时，你通常？",["继续行动解决问题",["拿破仑",3,"项羽",2]],["独自冷静分析",["诸葛亮",3,"曹操",2]],["找信任的人交流",["刘邦",3,"林肯",2]],["规律生活慢慢处理",["曾国藩",3,"孙权",2]]],
+["速度和准确性必须选一个，你更偏向？",["速度，机会稍纵即逝",["拿破仑",3,"项羽",2]],["准确性，慢一点也可以",["诸葛亮",3,"曾国藩",3]],["根据情况灵活选择",["曹操",3,"孙权",3]],["优先考虑对别人的影响",["林肯",3,"刘邦",2]]],
+["你希望别人记住你什么？",["我取得过很大的成就",["拿破仑",3,"武则天",3]],["我很有智慧、有章法",["诸葛亮",3,"曹操",2]],["我让身边的人变得更好",["刘邦",3,"孙权",3]],["我是值得信任、有原则的人",["林肯",3,"曾国藩",3]]],
+["计划被突然打乱，你会？",["立即重新部署",["曹操",3,"拿破仑",3]],["重新分析再制定方案",["诸葛亮",3,"曾国藩",3]],["找人商量新办法",["刘邦",3,"孙权",3]],["接受变化但守住核心目标",["林肯",3,"孙权",2]]],
+["长期竞争中，你最依赖什么？",["胆量和执行速度",["项羽",3,"拿破仑",3]],["信息、判断和策略",["曹操",3,"诸葛亮",3]],["人才和人际关系",["刘邦",3,"孙权",3]],["纪律、耐心和持续投入",["曾国藩",3,"林肯",2]]],
+["如果只能选择一种人生方式，你更倾向于？",["轰轰烈烈，不留遗憾",["项羽",3,"拿破仑",3]],["深谋远虑建立优势",["曹操",3,"诸葛亮",3]],["与优秀的人创造更大的事",["刘邦",3,"孙权",3]],["守住原则，长期成为更好的自己",["林肯",3,"曾国藩",3]]]
+];
+const people={
+曹操:["⚔️","现实谋略型","现实主义、战略思维与适应力。你关注资源、机会和结果，面对复杂局面通常会寻找可行的策略。",["战略思维","果断","现实主义","适应力"]],
+诸葛亮:["🪶","谋略规划型","你倾向于先思考再行动，喜欢拆解复杂问题，提前考虑风险与后果，并重视长期计划。",["理性","规划","谨慎","长期主义"]],
+刘邦:["👑","识人整合型","你重视人与人之间的关系，也擅长发现不同人的优势，把资源和人才组织起来。",["识人","协调","情商","团队意识"]],
+项羽:["🏹","强势行动型","你具有很强的行动倾向和自我驱动力，面对挑战更愿意直接迎上去。",["勇气","行动力","自信","竞争意识"]],
+武则天:["👸","权力进取型","你对机会和影响力比较敏感，不容易满足于被动位置，有较强目标意识。",["独立","目标感","掌控力","进取"]],
+孙权:["🏯","平衡决策型","你擅长在不同力量之间寻找平衡，会考虑局势、关系与长期利益。",["平衡","耐心","协调","大局观"]],
+曾国藩:["📜","长期积累型","你相信稳定、纪律和长期积累，更倾向于通过持续行动建立优势。",["自律","耐心","责任感","长期主义"]],
+林肯:["🕊️","原则沟通型","你重视原则，也重视人与人的沟通，希望决定能够经得起长期检验。",["原则","包容","沟通","责任感"]],
+拿破仑:["🎖️","进取执行型","你目标感很强，喜欢把想法迅速变成行动，对竞争和挑战的接受度较高。",["目标感","执行力","自信","竞争意识"]]
+};
+let i=0,ans=[];
+function start(){i=0;ans=[];document.getElementById("home").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("quiz").classList.remove("hidden");render();scrollTo(0,0)}
+function render(){
+let [q,opts]=qs[i];document.getElementById("counter").textContent=`第 ${i+1} / ${qs.length} 题`;document.getElementById("pct").textContent=Math.round((i+1)/qs.length*100)+"%";document.getElementById("fill").style.width=((i+1)/qs.length*100)+"%";document.getElementById("q").textContent=q;
+let box=document.getElementById("opts");box.innerHTML="";
+opts.forEach((x,n)=>{let el=document.createElement("button");el.className="option"+(ans[i]===n?" selected":"");el.textContent=x[0];el.onclick=()=>{ans[i]=n;render()};box.appendChild(el)});
+document.getElementById("back").disabled=i===0;document.getElementById("next").textContent=i===qs.length-1?"查看结果":"下一题";document.getElementById("next").disabled=ans[i]===undefined;
+}
+function prev(){if(i>0){i--;render()}}
+function next(){if(ans[i]===undefined)return;if(i<qs.length-1){i++;render()}else result()}
+function result(){
+let s={};Object.keys(people).forEach(k=>s[k]=0);
+qs.forEach((q,j)=>{let m=q[1][ans[j]][1];for(let z=0;z<m.length;z+=2)s[m[z]]+=m[z+1]});
+let sorted=Object.entries(s).sort((a,b)=>b[1]-a[1]),win=sorted[0][0],p=people[win],max=sorted[0][1];
+let bars=sorted.slice(0,5).map(x=>`<div class="score"><div class="score-head"><span>${x[0]}</span><span>${Math.round(x[1]/max*100)}%</span></div><div class="score-track"><div class="score-fill" style="width:${Math.round(x[1]/max*100)}%"></div></div></div>`).join("");
+document.getElementById("quiz").classList.add("hidden");let r=document.getElementById("result");r.classList.remove("hidden");
+r.innerHTML=`<div class="result-icon">${p[0]}</div><div class="type">你的历史人物性格原型</div><h2>${win}</h2><div class="type">${p[1]}</div><div class="tags">${p[3].map(t=>`<span class="tag">${t}</span>`).join("")}</div><div class="share"><small>HISTORY × PERSONALITY</small><strong>${win}</strong><p>${p[1]} · ${p[3].slice(0,3).join(" · ")}</p></div><p class="intro">${p[2]}</p><div class="result-section"><h3>你的匹配度</h3>${bars}</div><div class="result-section"><h3>结果说明</h3><p class="intro" style="margin:0">测试将你的答题倾向映射到历史人物性格原型。真实历史人物具有复杂、多面的经历，因此结果只用于娱乐和自我观察。</p></div><div class="actions"><button class="btn primary" style="width:100%" onclick="start()">重新测试</button></div>`;
+scrollTo(0,0)
+}
+</script>
+</body>
+</html>
